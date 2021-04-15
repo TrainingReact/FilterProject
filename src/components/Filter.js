@@ -6,7 +6,7 @@ import { DATA } from "../data/Data"; */
 export default function Filter() {
   return (
     <div className="filter">
-      <h3>Filter</h3>
+      <h3>Filter sgrgg</h3>
       <FilterHeader />
       <FilterBody />
       {/* <ButtonProva variant={"primary"} children={"prova storybook"} data={DATA} /> */}
