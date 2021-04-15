@@ -1,0 +1,23 @@
+.select-option-filter{
+  flex-flow: row nowrap;
+    width: 100%;
+    display: flex;
+}
+
+.botton-filter-container{
+  align-self: center;
+  flex-grow: 10;
+}
+
+.title-filter-container{
+  flex-grow: 1;
+}
+
+.list{
+  list-style-type: none;
+}
+
+.filter-body{
+  display: flex;
+    flex-flow: column nowrap;
+}
