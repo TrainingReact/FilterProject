@@ -1,17 +1,19 @@
 import { SELECT_ALL } from "../data/Data";
 import "./filterheader.css";
-
-export default function FilterHeader() {
+export default function FilterHeader({ label, classname, backgroundColor }) {
   return (
-    <div className="filter-header">
+    <div className="filter-header" style={{ backgroundColor: backgroundColor }}>
       <input type="checkbox" name="selectAll" />
-      <label>{SELECT_ALL.filterName}</label>
+      <label className={classname}>
+        {/* {SELECT_ALL.filterName} */}
+        {label}
+      </label>
     </div>
   );
 }
 
 FilterHeader.defaultProps = {
-  primary: true,
-  backgroundColor: null,
+  classname: "primary",
   label: "primary",
+  backgroundColor: "#E6E6FA",
 };

@@ -1,4 +1,5 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
+import { SUB_SELECT_ALL } from "../data/Data";
 import ViewSubFilterItem from "../utils/ViewSubFilterItem";
 
 /**
@@ -8,24 +9,22 @@ import ViewSubFilterItem from "../utils/ViewSubFilterItem";
  * @returns
  */
 export default function CheckboxSelectGroup(props) {
-  const { arrayData: arrayData, filterName: filterName } = props;
+  const { arrayData: arrayData, filterName: filterName, filterGroup: filterGroup } = props;
   //checkbox select group ref
   const checkbox = useRef();
-  //this use State helps to keep track of checked/unchecked
-  const [isChecked, setIsChecked] = useState(false);
+  //this use State save the correct sub select all with checked modified
+  const [find, setfind] = useState();
   //this function set state according to checked/unchecked select group checkbox
-  const check = () => {
-    if (checkbox.current.checked) {
-      setIsChecked(true);
-    } else {
-      setIsChecked(false);
-    }
-  };
+  const check = useCallback(() => {
+    let selectGroup = SUB_SELECT_ALL.find((group) => (group.filterGroup = filterGroup));
+    selectGroup.checked = !selectGroup.checked;
+    setfind(selectGroup);
+  }, []);
   return (
     <div className={"sub-filter-container "}>
       <input type="checkbox" ref={checkbox} name="selectAll" onChange={check} />
       <label>{filterName}</label>
-      <ViewSubFilterItem arrayData={arrayData} isChecked={isChecked} />
+      <ViewSubFilterItem arrayData={arrayData} mySubSelectAllGroup={find} />
     </div>
   );
 }

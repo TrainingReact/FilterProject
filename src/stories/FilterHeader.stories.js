@@ -5,22 +5,26 @@ export default {
   title: "FilterHeader",
   component: "FilterHeader",
   argTypes: {
+    classname: {
+      name: "classname",
+      control: "text",
+      required: true,
+    },
+    label: { control: "text" },
     backgroundColor: { control: "color" },
-    label: { variant: "label" },
   },
 };
-
 const Template = (args) => <FilterHeader {...args} />;
-export const Primary = () => Template.bind({});
+export const Primary = Template.bind({});
 Primary.args = {
-  primary: true,
   label: "Primary",
-  backgroundColor: "#FF1493",
+  classname: "primary",
+  backgroundColor: "#FFFF00",
 };
 
-export const Secondary = () => Template.bind({});
+export const Secondary = Template.bind({});
 Secondary.args = {
-  secondary: true,
   label: "Secondary",
-  backgroundColor: "#FFA500",
+  classname: "secondary",
+  backgroundColor: "	#B0E0E6",
 };

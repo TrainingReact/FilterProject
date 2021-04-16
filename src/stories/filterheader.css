@@ -1,3 +1,13 @@
 .primary{
-  background-color: blueviolet;
+  font-size: large;
+  color:crimson;
+  margin-left: 40px;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.secondary{
+  font-size:small;
+  color:darkblue;
+  margin-left: 20px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }

@@ -13,22 +13,24 @@ export default function FilterGroup(props) {
   //this local variable is false in case of a "select group" is not available by SUB_SELECT_ALL.
   //Otherwise, it is set to true if the select group is available.
   let canBeSelect = false;
-  //this variable helps to save current filter name.
-  let filterName = "";
+  //this variable helps to save current filter name and filter group name.
+  let filterInfo = { filterName: "", filterGroup: "" };
   //if select group is available, set canBeSelect to true.
   SUB_SELECT_ALL.map((element) => {
     if (element.filterGroup === groupName) {
-      return (canBeSelect = true), (filterName = element.filterName);
+      return (canBeSelect = true), (filterInfo.filterName = element.filterName), (filterInfo.filterGroup = element.filterGroup);
     }
   });
   //if canBeSelect is true you can see select group checkbox
-  return canBeSelect ? (
+  return (
     <div className={"sub-filter-container "}>
-      <CheckboxSelectGroup arrayData={arr} filterName={filterName} />
-    </div>
-  ) : (
-    <div className="sub-filter-container">
-      <ViewSubFilterItem arrayData={arr} />
+      {canBeSelect ? (
+        <span>
+          <CheckboxSelectGroup arrayData={arr} filterName={filterInfo.filterName} filterGroup={filterInfo.filterGroup} />
+        </span>
+      ) : (
+        <ViewSubFilterItem arrayData={arr} />
+      )}
     </div>
   );
 }
