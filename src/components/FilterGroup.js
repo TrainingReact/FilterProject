@@ -2,6 +2,7 @@ import { SUB_SELECT_ALL } from "../data/Data";
 import React from "react";
 import ViewSubFilterItem from "../utils/ViewSubFilterItem";
 import CheckboxSelectGroup from "./CheckboxSelectGroup";
+
 /**
  * The component manage filter groups
  * @param {string} props.groupName
@@ -29,7 +30,7 @@ export default function FilterGroup(props) {
           <CheckboxSelectGroup arrayData={arr} filterName={filterInfo.filterName} filterGroup={filterInfo.filterGroup} />
         </span>
       ) : (
-        <ViewSubFilterItem arrayData={arr} />
+        <ViewSubFilterItem arr={arr} />
       )}
     </div>
   );
