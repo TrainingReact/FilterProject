@@ -1,8 +1,5 @@
 import React from "react";
-/* import ButtonFilter from "./ButtonFilter"; */
 import FilterContainer from "./FilterContainer";
-/* import useFilter from "../hooks/useFilter"; */
-import { DATA } from "../data/Data";
 /**
  * This is the overall filter component.
  * FilterHeader is the select all option.
@@ -18,12 +15,7 @@ export default function Filter() {
           {" "}
           <h3>Filter</h3>
         </span>
-        {/*   <span className="botton-filter-container" onClick={toggle}>
-          <ButtonFilter />
-        </span> */}
       </div>
-      {/* <FilterContainer isShowing={isShowing} hide={toggle} /> */}
-
       <FilterContainer />
     </div>
   );

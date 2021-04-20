@@ -9,12 +9,11 @@ import React from "react";
 export default function ViewSubFilterItem(props) {
   const { arr: arr } = props;
   return (
-    <ul className="list">
+    <ul className="list-without-group">
       {arr.map((item, index) => {
         return (
           <li key={index}>
-            {index}
-            <input type="checkbox" name={item} /> {item.filterValue}
+            <input key={index} type="checkbox" name={item} /> {item.filterValue}
           </li>
         );
       })}

@@ -1,6 +1,6 @@
 import { SUB_SELECT_ALL } from "../data/Data";
 import React from "react";
-import ViewSubFilterItem from "../utils/ViewSubFilterItem";
+import ViewSubFilterItem from "./ViewSubFilterItem";
 import CheckboxSelectGroup from "./CheckboxSelectGroup";
 
 /**
