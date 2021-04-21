@@ -1,6 +1,5 @@
 import { SUB_SELECT_ALL } from "../data/Data";
 import React from "react";
-import ViewSubFilterItem from "./ViewSubFilterItem";
 import CheckboxSelectGroup from "./CheckboxSelectGroup";
 
 /**
@@ -10,7 +9,7 @@ import CheckboxSelectGroup from "./CheckboxSelectGroup";
  * @returns
  */
 export default function FilterGroup(props) {
-  const { groupName: groupName, arr: arr } = props;
+  const { groupName: groupName, arr: arr, setr: setr } = props;
   //this local variable is false in case of a "select group" is not available by SUB_SELECT_ALL.
   //Otherwise, it is set to true if the select group is available.
   let canBeSelect = false;
@@ -25,13 +24,15 @@ export default function FilterGroup(props) {
   //if canBeSelect is true you can see select group checkbox
   return (
     <div className={"sub-filter-container "}>
-      {canBeSelect ? (
-        <span>
-          <CheckboxSelectGroup arrayData={arr} filterName={filterInfo.filterName} filterGroup={filterInfo.filterGroup} />
-        </span>
-      ) : (
-        <ViewSubFilterItem arr={arr} />
-      )}
+      <span>
+        <CheckboxSelectGroup
+          arrayData={arr}
+          filterName={filterInfo.filterName}
+          filterGroup={filterInfo.filterGroup !== "" ? filterInfo.filterGroup : groupName}
+          canBeSelect={canBeSelect}
+          setr={setr}
+        />
+      </span>
     </div>
   );
 }

@@ -59,3 +59,8 @@ input, button, label{
 .list-without-group{
   list-style-type: none;
 }
+
+.filter-results{
+  display: flex;
+  flex-flow: column wrap;
+}

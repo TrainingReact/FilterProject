@@ -24,3 +24,24 @@ export function addIsCheckedToSubFilterData(arrayData) {
   });
   return newData;
 }
+
+/**
+ * the function returns actual filter selected
+ * @param {array} next
+ * @returns {array}
+ */
+export function whatIsCheckedByUser(next) {
+  var trueValues = next.filter((el) => {
+    return conditionFilter(el);
+  });
+  return trueValues;
+}
+
+/**
+ * the function changes the object checked
+ * @param {object} el
+ * @returns {object}
+ */
+export function conditionFilter(el) {
+  return el.isChecked === true;
+}
