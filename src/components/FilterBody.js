@@ -1,6 +1,7 @@
 import FilterGroup from "../components/FilterGroup";
 import React, { useContext } from "react";
-import { DataContext } from "../App";
+import { DataContext } from "../components/Filter";
+
 /**
  * The component represents the overall filter body.
  * In particular, this is the filter groups container

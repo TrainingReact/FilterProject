@@ -10,8 +10,15 @@ export default {
       control: "text",
       required: true,
     },
-    label: { control: "text" },
-    backgroundColor: { control: "color" },
+    label: "text",
+
+    mapping: {
+      control: {
+        type: "select",
+        options: ["Bold", "Italic"],
+      },
+      backgroundColor: { control: "color" },
+    },
   },
 };
 const Template = (args) => <FilterHeader {...args} />;
@@ -26,5 +33,5 @@ export const Secondary = Template.bind({});
 Secondary.args = {
   label: "Secondary",
   classname: "secondary",
-  backgroundColor: "	#B0E0E6",
+  backgroundColor: "#B0E0E6",
 };

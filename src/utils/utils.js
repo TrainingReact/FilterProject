@@ -1,13 +1,10 @@
 /**
- * the function checked if an array contains some checked element
+ * the function checked if an array contains all checked element
  * @param {array} ckbox
  * @returns {array}
  */
-export function check(ckbox) {
-  const result = ckbox.filter((el) => {
-    return el.checked === true;
-  });
-  return result;
+export function check(ckbox, condition) {
+  return ckbox.every((element) => element.checked === condition);
 }
 
 /**

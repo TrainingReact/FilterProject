@@ -1,7 +1,19 @@
+.filter{
+  background-color: #844e84;
+  margin-top: 3%;
+  /* padding: 1%; */
+  color:#e8eee2
+}
+
+.primary-button, .title-filter-container{
+  padding:4%;
+}
 .select-option-filter{
   flex-flow: row nowrap;
-    width: 100%;
     display: flex;
+    align-items: center;
+    width: 250px;
+    max-width: 250px;
 }
 
 .botton-filter-container{
@@ -14,7 +26,7 @@
 }
 
 
-.filter-body{
+.filter-body-container, .filter-body{
   display: flex;
     flex-flow: column nowrap;
 }
@@ -36,8 +48,9 @@ display: none;
 
 .checkbox-select-group{
   display: flex;
-    justify-content: space-between;
-    border: 1px solid;
+  justify-content: space-around;
+    align-items: center;
+    background-color: #653b65;
 }
 
 input, button, label{
@@ -46,14 +59,20 @@ input, button, label{
 }
 
 .list{
-  border:1px solid;
   margin: 0px;
   list-style-type: none;
+ 
+}
+
+.list li{
+  padding-bottom: 4%;
+  padding-top: 2%;
 }
 
 .sub-filter-container{
   display: flex;
     flex-flow: column nowrap;
+
 }
 
 .list-without-group{
@@ -62,5 +81,45 @@ input, button, label{
 
 .filter-results{
   display: flex;
-  flex-flow: column wrap;
+  flex-flow: column nowrap;
+  border-bottom: 1px solid;
+  text-align: justify;
+  /* background-color: #a362a3; */
+  background-color:#6a854e
+}
+
+.filter-body-container{
+  width: 200px;
+    max-width: 200px;
+    display: inline-block;
+}
+
+.filter-header{
+  padding-top:8%;
+  padding-bottom:12%;
+  display: flex;
+  justify-content: center;
+}
+
+button{
+  display: contents;
+  font-size: 20px;
+  color:#e8eee2;
+  cursor: pointer;
+}
+
+input[type=checkbox]
+{
+  -ms-transform: scale(1.5); /* IE */
+  -moz-transform: scale(1.5); /* FF */
+  -webkit-transform: scale(1.5); /* Safari and Chrome */
+  -o-transform: scale(1.5); /* Opera */
+  transform: scale(1.5);
+  background-color: #cfdbc2;
+  cursor: pointer;
+}
+
+
+.hidden{
+  visibility: hidden;
 }
