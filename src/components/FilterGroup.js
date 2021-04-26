@@ -1,6 +1,5 @@
-import React, { useContext } from "react";
+import React, { useContext, useMemo, useEffect, useState } from "react";
 import CheckboxSelectGroup from "./CheckboxSelectGroup";
-import { SubSelectallContext } from "../components/Filter";
 /**
  * The component manage filter groups
  * @param {string} props.groupName
@@ -8,30 +7,12 @@ import { SubSelectallContext } from "../components/Filter";
  * @returns
  */
 export default function FilterGroup(props) {
-  const data = useContext(SubSelectallContext);
-  const { groupName: groupName, arr: arr, setr: setr } = props;
-  //this local variable is false in case of a "select group" is not available by SUB_SELECT_ALL.
-  //Otherwise, it is set to true if the select group is available.
-  let canBeSelect = false;
-  //this variable helps to save current filter name and filter group name.
-  let filterInfo = { filterName: "", filterGroup: "" };
-  //if select group is available, set canBeSelect to true.
-  data.map((element) => {
-    if (element.filterGroup === groupName) {
-      return (canBeSelect = true), (filterInfo.filterName = element.filterName), (filterInfo.filterGroup = element.filterGroup);
-    }
-  });
-  //if canBeSelect is true you can see select group checkbox
+  const { arr: arr, setresult: setresult } = props;
   return (
     <div className={"sub-filter-container "}>
       <span>
-        <CheckboxSelectGroup
-          arrayData={arr}
-          filterName={filterInfo.filterName}
-          filterGroup={filterInfo.filterGroup !== "" ? filterInfo.filterGroup : groupName}
-          canBeSelect={canBeSelect}
-          setr={setr}
-        />
+        {/*  {Object.entries(arr).map(([key, value]) => { */}
+        <CheckboxSelectGroup totalData={arr} setresult={setresult} />;{/*  })} */}
       </span>
     </div>
   );

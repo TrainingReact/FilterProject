@@ -4,7 +4,7 @@
  * @returns {array}
  */
 export function check(ckbox, condition) {
-  return ckbox.every((element) => element.checked === condition);
+  return ckbox.every((element) => element.isChecked === condition);
 }
 
 /**
@@ -41,4 +41,19 @@ export function whatIsCheckedByUser(next) {
  */
 export function conditionFilter(el) {
   return el.isChecked === true;
+}
+
+export function addIsCheckedToSubFilterObjectData(arrayData) {
+  let newDataObj = [];
+  Object.entries(arrayData).map(([key, value]) => {
+    newDataObj.push({
+      [key]: value.map((elem) => {
+        return {
+          ...elem,
+          isChecked: false,
+        };
+      }),
+    });
+  });
+  return newDataObj;
 }

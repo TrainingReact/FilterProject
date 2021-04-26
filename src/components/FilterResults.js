@@ -6,11 +6,12 @@ import React from "react";
  */
 export default function FilterResults(props) {
   const { value: elementChoosen } = props;
-  return (
-    <div>
+
+  return 0;
+  /* <div>
       {elementChoosen.map((element, index) => {
         return <span key={index}>{element.filterValue + "  "}</span>;
       })}
-    </div>
-  );
+    </div> 
+  };*/
 }

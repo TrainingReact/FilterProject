@@ -19,6 +19,7 @@ export default function Filter() {
   const open = () => {
     isSelected ? setIsSelected(false) : setIsSelected(true);
   };
+
   return (
     <div className="filter">
       <div className="select-option-filter">

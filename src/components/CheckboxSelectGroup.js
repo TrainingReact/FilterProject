@@ -1,141 +1,164 @@
-import React, { useRef, useState, useMemo, useEffect } from "react";
+import React, { useRef, useState, useMemo, useEffect, useContext, useReducer, useCallback } from "react";
 import ButtonFilter from "./ButtonFilter";
-import { check, addIsCheckedToSubFilterData, whatIsCheckedByUser } from "../utils/utils";
-/**
- * the component manage the case in which select group checkbox is available from SUB_SELECT_ALL
- * @param {array} props.arrayData
- * @param {string} props.filterName
- * @param {string} props.filterGroup
- * @returns
- */
-export default function CheckboxSelectGroup(props) {
-  const { arrayData: arrayData, filterName: filterName, filterGroup: filterGroup, canBeSelect: canBeSelect, setr: setr } = props;
+import { check, addIsCheckedToSubFilterData, addIsCheckedToSubFilterObjectData, whatIsCheckedByUser } from "../utils/utils";
+import { SubSelectallContext } from "../components/Filter";
 
-  //ALL USE REF
+export default function CheckboxSelectGroup(props) {
+  const { setresult: setresult, totalData: totalData } = props;
+  const SubSelall = useContext(SubSelectallContext);
+  //it add ischecked property for every sub filter value to set the state with updated data
+  const newTotalData = addIsCheckedToSubFilterObjectData(totalData);
+
+  //the useState is used to restore the previous checkboxes configuration. At initial step, it is equal to current data
+  const [previous, setprevious] = useState({ data: newTotalData });
+  //the isSelected useState is used to save the visibility after click button
+  const [isSelected, setIsSelected] = useState(false);
+
   //checkbox items select group ref
   const checkbox = useRef([]);
   //checkbox select group ref
   const selectGroup = useRef([]);
 
-  //FORMAT DATA TO INIZIALIZE USESTATE
-  //it add ischecked property for every sub filter value to set the state with updated data
-  const newData = addIsCheckedToSubFilterData(arrayData);
-
-  //ALL USESTATE
-  //the useState is used to restore the previous checkboxes configuration. At initial step, it is equal to current data
-  const [previous, setprevious] = useState({ data: newData });
-  //the isSelected useState is used to save the visibility after click button
-  const [isSelected, setIsSelected] = useState(false);
-  //check the situation in which the previous state have all false checked and now we have all
-  //true checked
-  const [checkAllSelect, setcheckAllSelect] = useState(false);
-
-  //ALL FUNCTIONS
   //the function allows to manage filter visibility after button click
   const open = () => {
     isSelected ? setIsSelected(false) : setIsSelected(true);
   };
   //the function allows to change class (button)
   const styleClass = useMemo(() => (isSelected ? "checkbox-select-group-on" : "checkbox-select-group-off"), [isSelected]);
-  //the function manage sub filter value checked and save the actual checked/unchecked
-  //items configuration. The result is saved into previuos/setprevious useState to allow to restore
-  //data in case of select group unchecked.
+
   const handleCheckChildElement = (event) => {
     let data = previous.data;
-    //find who is checked and save in data
     data.forEach((element) => {
-      if (element.filterValue === event.target.value) {
-        element.isChecked = event.target.checked;
-      }
-      setr(whatIsCheckedByUser(data));
+      Object.entries(element).map(([group, items]) => {
+        items.forEach((a, i) => {
+          if (a.filterValue === event.target.value) {
+            a.isChecked = event.target.checked;
+          }
+        });
+      });
     });
-    //if all checkboxes are selected manually (without select group button)
-    //but the precedent state is all "isChecked === false", I have to restore the
-    //the previous state with the current checkboxes checked. Otherwise, if I deselect
-    //an item, the previous state is setted to all unchecked, so it lost the current value.
-    //NB. you have to manage this only if the checkbox group exists (for this reason you have to
-    //check canbeselect)
-    if (canBeSelect) {
-      if (checkAllSelect) {
-        data.forEach((element, index) => {
-          element.isChecked = checkbox.current[index].checked;
-        });
-        setr(whatIsCheckedByUser(data));
-      }
-      if (check(checkbox.current, true)) {
-        setr(whatIsCheckedByUser(data));
-        data.forEach((element) => {
-          element.isChecked = false;
-        });
-      }
-    }
     //save actual check/uncheck to restore
     setprevious({
       data: data,
     });
+
+    data.map((elem) => {
+      return Object.entries(elem).map(([group, items]) => {
+        let isAllChecked = check(items, true);
+        if (isAllChecked) {
+          selectGroup.current.map((sel) => {
+            if (sel.value === group) {
+              sel.checked = true;
+            }
+          });
+        } else if (!isAllChecked) {
+          selectGroup.current.map((sel) => {
+            if (sel.value === group) {
+              sel.checked = false;
+            }
+          });
+        }
+      });
+    });
   };
 
+  //manage the situation in which you select all the subitems or unselect one
+  /*   useEffect(() => {
+    previous.data.map((elem) => {
+      return Object.entries(elem).map(([group, items]) => {
+        let isAllChecked = check(items, true);
+        if (isAllChecked) {
+          selectGroup.current.map((sel) => {
+            if (sel.value === group) {
+              sel.checked = true;
+            }
+          });
+        } else {
+          selectGroup.current.map((sel) => {
+            if (sel.value === group) {
+              sel.checked = false;
+            }
+          });
+        }
+      });
+    });
+  }, [previous, setprevious]);
+ */
   //the function manage the select group selection. if select group is checked then
   //all the sub filter items must be checked. Otherwise, if select group is unchecked
   //then it restores the items to the previous state.
   const handleAllChecked = (event) => {
-    let data = previous.data;
     //it is a supporting array to save the actual checked values (useful to set filterres)
     let filterChoosen = [];
-    //restore previous state because you have unchecked "select group"
-    if (!event.target.checked) {
-      data.map((element, key) => {
-        filterChoosen.push({ filterName: filterName, filterValue: element.filterValue, isChecked: element.isChecked });
-        return (checkbox.current[key].checked = element.isChecked);
+    let pippo;
+    if (event.target.checked) {
+      Object.entries(checkbox.current).map(([i, items]) => {
+        if (i === event.target.value) {
+          for (let j = 0; j < items.childNodes.length; j++) {
+            items.childNodes[j].children[0].checked = true;
+          }
+        }
       });
-      //check all because you have checked "select group"
-    } else if (event.target.checked) {
-      checkbox.current.forEach((el) => {
-        el.checked = true;
-        filterChoosen.push({ filterName: filterName, filterValue: el.value, isChecked: el.checked });
+    } else {
+      Object.entries(checkbox.current).map(([i, items]) => {
+        if (i === event.target.value) {
+          previous.data.map((prev) => {
+            Object.entries(prev).map(([k, prevElem]) => {
+              if (k === event.target.value) {
+                let areAllChecked = check(prevElem, true);
+                if (!areAllChecked) {
+                  for (let j = 0; j < items.childNodes.length; j++) {
+                    items.childNodes[j].children[0].checked = prevElem[j].isChecked;
+                  }
+                } else {
+                  for (let j = 0; j < items.childNodes.length; j++) {
+                    items.childNodes[j].children[0].checked = false;
+                  }
+                }
+              }
+            });
+          });
+        }
       });
-      //if all current checkboxes are selected and the previous state shows that they were not selected,
-      //set checkAllSelect to true (this situation is handled in handleCheckChildElement)
-      const isAllSelected = check(checkbox.current, true);
-      const previousNotSelected = check(data, false);
-      if (isAllSelected && !previousNotSelected) {
-        setcheckAllSelect(true);
-      }
     }
-    setr(whatIsCheckedByUser(filterChoosen));
   };
-
-  //manage the situation in which you select all the subitems or unselect one
-  useEffect(() => {
-    check(checkbox.current, true) ? (selectGroup.current.checked = true) : (selectGroup.current.checked = false);
-  }, [handleCheckChildElement]);
-
   return (
-    <div>
-      <div className="sub-filter-container">
-        <div className="checkbox-select-group">
-          {canBeSelect ? (
-            <input type="checkbox" name="selectAll" ref={selectGroup} onChange={handleAllChecked} value="checkedall" />
-          ) : (
-            <span>
-              <input type="checkbox" className="hidden"></input>
-            </span>
-          )}
-          <label>
-            <h4>{filterGroup}</h4>
-          </label>
-          <ButtonFilter func={open} isSelected={isSelected} />
-        </div>
-        <ul className={"list " + styleClass}>
-          {previous.data.map((item, index) => {
+    <div className="sub-filter-container">
+      {newTotalData.map((element, index) => {
+        {
+          return Object.entries(element).map(([group, items]) => {
             return (
-              <li key={index}>
-                <input key={index} ref={(el) => (checkbox.current[index] = el)} onChange={handleCheckChildElement} type="checkbox" value={item.filterValue} /> {item.filterValue}
-              </li>
+              <span key={group}>
+                <div className="checkbox-select-group">
+                  {SubSelall.map((checkPresent, i) => {
+                    if (checkPresent.filterGroup === group) {
+                      return (
+                        <input key={i} type="checkbox" name="selectAll" value={checkPresent.filterGroup} ref={(el) => (selectGroup.current[i] = el)} onChange={handleAllChecked} />
+                      );
+                    } else {
+                      return <input key={i} type="checkbox" className="hidden"></input>;
+                    }
+                  })}
+
+                  <label>
+                    <h4>{group}</h4>
+                  </label>
+                  {/* <ButtonFilter func={open} isSelected={isSelected} /> */}
+                </div>
+                <ul key={group} className={"list "} name={group} ref={(el) => (checkbox.current[group] = el)}>
+                  {items.map((item, i) => {
+                    return (
+                      <li key={i}>
+                        <input type="checkbox" name={group} value={item.filterValue} onChange={handleCheckChildElement} /> {item.filterValue}
+                      </li>
+                    );
+                  })}
+                </ul>
+              </span>
             );
-          })}
-        </ul>
-      </div>
+          });
+        }
+      })}
     </div>
   );
 }
