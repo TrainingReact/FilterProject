@@ -8,11 +8,22 @@ import CheckboxSelectGroup from "./CheckboxSelectGroup";
  */
 export default function FilterGroup(props) {
   const { arr: arr, setresult: setresult } = props;
+  const [st, setst] = useState([{ group: "", click: false, classname: "list checkbox-select-group-off" }]);
+
+  useEffect(() => {
+    let arraySetst = Object.entries(arr).map(([ind, element]) => {
+      return {
+        group: ind,
+        click: false,
+        classname: "list checkbox-select-group-off",
+      };
+    });
+    setst(arraySetst);
+  }, []);
   return (
     <div className={"sub-filter-container "}>
       <span>
-        {/*  {Object.entries(arr).map(([key, value]) => { */}
-        <CheckboxSelectGroup totalData={arr} setresult={setresult} />;{/*  })} */}
+        <CheckboxSelectGroup st={st} setst={setst} totalData={arr} setresult={setresult} />
       </span>
     </div>
   );

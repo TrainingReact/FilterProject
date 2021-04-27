@@ -123,3 +123,12 @@ input[type=checkbox]
 .hidden{
   visibility: hidden;
 }
+
+
+.button-on{
+  content: '&#9650';
+}
+
+.button-off{
+  content: '&#9660';
+}

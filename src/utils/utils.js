@@ -57,3 +57,7 @@ export function addIsCheckedToSubFilterObjectData(arrayData) {
   });
   return newDataObj;
 }
+
+export function searchValue(el, value) {
+  return el.filterValue === value;
+}
