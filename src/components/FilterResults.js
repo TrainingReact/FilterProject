@@ -7,11 +7,13 @@ import React from "react";
 export default function FilterResults(props) {
   const { value: elementChoosen } = props;
 
-  return 0;
-  /* <div>
+  return (
+    <div>
       {elementChoosen.map((element, index) => {
-        return <span key={index}>{element.filterValue + "  "}</span>;
+        if (element.isChecked) {
+          return <span key={index}>{element.filterValue + "  "}</span>;
+        }
       })}
-    </div> 
-  };*/
+    </div>
+  );
 }

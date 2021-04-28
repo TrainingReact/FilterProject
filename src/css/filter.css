@@ -2,8 +2,11 @@
   background-color: #844e84;
   margin-top: 3%;
   /* padding: 1%; */
-  color:#e8eee2
+  color:#e8eee2;
+  width: 30%;
 }
+
+
 
 .primary-button, .title-filter-container{
   padding:4%;
@@ -12,8 +15,7 @@
   flex-flow: row nowrap;
     display: flex;
     align-items: center;
-    width: 250px;
-    max-width: 250px;
+    width: 100%;
 }
 
 .botton-filter-container{
@@ -48,9 +50,10 @@ display: none;
 
 .checkbox-select-group{
   display: flex;
-  justify-content: space-around;
+  justify-content: space-evenly;
     align-items: center;
     background-color: #653b65;
+    width: 100%;
 }
 
 input, button, label{
@@ -101,7 +104,7 @@ input, button, label{
   justify-content: center;
 }
 
-button{
+.button{
   display: contents;
   font-size: 20px;
   color:#e8eee2;
@@ -121,14 +124,40 @@ input[type=checkbox]
 
 
 .hidden{
-  visibility: hidden;
+  display: none;
 }
 
 
-.button-on{
-  content: '&#9650';
+.arrow{
+  background-color: transparent;
+  border: solid #e8eee2;
+  border-width: 0 5px 5px 0;
+  display: inline-block;
+  padding: 5px;
+  cursor: pointer;
 }
 
-.button-off{
-  content: '&#9660';
+
+.up {
+ 
+  transform: rotate(-135deg);
+  -webkit-transform: rotate(-135deg);
 }
+ 
+.down {
+
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+}
+
+/* .check-group-align{
+flex-grow:4;
+}
+
+.title-group-name{
+  flex-grow:2;
+}
+
+.button-group{
+  flex-grow:1;
+} */

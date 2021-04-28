@@ -15,10 +15,6 @@ export const SubSelectallContext = createContext(SUB_SELECT_ALL);
 export default function Filter() {
   //the isSelected useState is used to save the visibility after click button
   const [isSelected, setIsSelected] = useState(false);
-  //the function allows to manage filter visibility after button click
-  const open = () => {
-    isSelected ? setIsSelected(false) : setIsSelected(true);
-  };
 
   return (
     <div className="filter">
@@ -29,7 +25,7 @@ export default function Filter() {
         </span>
         <span className="primary-button">
           {" "}
-          <ButtonFilter func={open} isSelected={isSelected} />
+          <ButtonFilter isSelected={isSelected} setIsSelected={setIsSelected} />
         </span>
       </div>
       <DataContext.Provider value={DATA}>
