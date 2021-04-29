@@ -9,7 +9,7 @@ import { DataContext } from "../components/Filter";
  */
 export default function FilterBody(props) {
   const data = useContext(DataContext);
-  const { setresult: setresult } = props;
+  const { setresult: setresult, allIsSelected: allIsSelected } = props;
   return (
     <div className="filter-body">
       <FilterGroup arr={data} setresult={setresult} />

@@ -1,13 +1,24 @@
-import React, { useRef, useState, useContext } from "react";
+import React, { useRef, useState, useContext, useEffect } from "react";
 import ButtonGroup from "./ButtonGroup";
-import { check, addIsCheckedToSubFilterObjectData, formattingResFromRef } from "../utils/utils";
+import { check, saveData, manageGroupCheckboxes, addIsCheckedToSubFilterObjectData, formattingResFromRef, takePreviousChecked } from "../utils/utils";
 import { SubSelectallContext } from "../components/Filter";
 import CheckboxSelectElement from "../components/CheckboxSelectElement";
+import { allCheckboxManagement } from "../components/FilterContainer";
 
+/**
+ * Check group management
+ * @param {function} props.setresult
+ * @param {array} props.totalData
+ * @param {array} props.classItemState
+ * @param {function} props.setClassItemState
+ * @returns
+ */
 export default function CheckboxSelectGroup(props) {
   const { setresult: setresult, totalData: totalData, classItemsState: classItemsState, setClassItemsState: setClassItemsState } = props;
   //SUB_SELECT_ALL data context
   const SubSelall = useContext(SubSelectallContext);
+  //Is select all pressed?
+  const selectAllItems = useContext(allCheckboxManagement);
   //it add ischecked property for every sub filter value to set the state with updated data
   const newTotalData = addIsCheckedToSubFilterObjectData(totalData);
   //the useState is used to restore the previous checkboxes configuration. At initial step, it is equal to current data
@@ -16,6 +27,36 @@ export default function CheckboxSelectGroup(props) {
   const checkbox = useRef([]);
   //checkbox select group ref
   const selectGroup = useRef([]);
+  /**
+   * manage select all button both for checkbox item and select group
+   */
+  useEffect(() => {
+    let data = previous.data;
+    if (selectAllItems) {
+      saveData(previous, checkbox, setPrevious);
+      Object.entries(checkbox.current).map(([i, items]) => {
+        Object.entries(items.children).map(([indexLi, liElem]) => {
+          return Object.entries(liElem.children).map(([indexInp, inputElem]) => {
+            inputElem.checked = true;
+          });
+        });
+      });
+      selectGroup.current.map((sel) => {
+        sel.checked = true;
+      });
+      setresult(formattingResFromRef(checkbox.current));
+    } else {
+      Object.entries(checkbox.current).map(([i, items]) => {
+        Object.entries(items.children).map(([indexLi, liElem]) => {
+          return Object.entries(liElem.children).map(([indexInp, inputElem]) => {
+            inputElem.checked = false;
+          });
+        });
+      });
+      manageGroupCheckboxes(data, selectGroup.current);
+      setresult(formattingResFromRef(checkbox.current));
+    }
+  }, [selectAllItems]);
 
   //the function manage the select group selection. if select group is checked then
   //all the sub filter items must be checked. Otherwise, if select group is unchecked
@@ -39,29 +80,12 @@ export default function CheckboxSelectGroup(props) {
       //all checked subitems, then you have to set the checkboxes to false. Otherwise, if
       //there are data to restore, set the correct true/false value.
       Object.entries(checkbox.current).map(([i, items]) => {
-        if (i === event.target.value) {
-          data.map((prev) => {
-            Object.entries(prev).map(([k, prevElem]) => {
-              if (k === event.target.value) {
-                //check if in the previous state all items was manually selected
-                let areAllChecked = check(prevElem, true);
-                if (areAllChecked === false) {
-                  Object.entries(items.children).map(([indexLi, liElem]) => {
-                    Object.entries(liElem.children).map(([indexInp, inputElem]) => {
-                      return (inputElem.checked = prevElem[indexLi].isChecked);
-                    });
-                  });
-                } else {
-                  Object.entries(items.children).map(([indexLi, liElem]) => {
-                    Object.entries(liElem.children).map(([indexInp, inputElem]) => {
-                      return (inputElem.checked = false);
-                    });
-                  });
-                }
-              }
-            });
+        Object.entries(items.children).map(([indexLi, liElem]) => {
+          Object.entries(liElem.children).map(([indexInp, inputElem]) => {
+            return (inputElem.checked = false);
           });
-        }
+        });
+        saveData(previous, checkbox, setPrevious);
       });
     }
     //send result to header filter
@@ -76,7 +100,7 @@ export default function CheckboxSelectGroup(props) {
             return (
               <span key={group}>
                 <div className="checkbox-select-group">
-                  <span className="check-group-align">
+                  <div className="check-group-align">
                     {SubSelall.map((checkPresent, i) => {
                       if (checkPresent.filterGroup === group) {
                         return (
@@ -87,11 +111,12 @@ export default function CheckboxSelectGroup(props) {
                             value={checkPresent.filterGroup}
                             ref={(el) => (selectGroup.current[i] = el)}
                             onChange={handleAllChecked}
+                            id="input-sub-items"
                           />
                         );
                       }
                     })}
-                  </span>
+                  </div>
                   <label className="title-group-name">
                     <h4>{group}</h4>
                   </label>

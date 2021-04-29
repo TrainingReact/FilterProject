@@ -17,22 +17,26 @@ export default function Filter() {
   const [isSelected, setIsSelected] = useState(false);
 
   return (
-    <div className="filter">
-      <div className="select-option-filter">
-        <span className="title-filter-container">
-          {" "}
-          <h2>Filter</h2>
-        </span>
-        <span className="primary-button">
-          {" "}
-          <ButtonFilter isSelected={isSelected} setIsSelected={setIsSelected} />
-        </span>
+    <span className="container">
+      <div className="col"></div>
+      <div className="filter">
+        <div className="select-option-filter">
+          <span className="title-filter-container">
+            {" "}
+            <h2>Filter</h2>
+          </span>
+          <span className="primary-button">
+            {" "}
+            <ButtonFilter isSelected={isSelected} setIsSelected={setIsSelected} />
+          </span>
+        </div>
+        <DataContext.Provider value={DATA}>
+          <SubSelectallContext.Provider value={SUB_SELECT_ALL}>
+            <FilterContainer isSelected={isSelected} />
+          </SubSelectallContext.Provider>
+        </DataContext.Provider>
       </div>
-      <DataContext.Provider value={DATA}>
-        <SubSelectallContext.Provider value={SUB_SELECT_ALL}>
-          <FilterContainer isSelected={isSelected} />
-        </SubSelectallContext.Provider>
-      </DataContext.Provider>
-    </div>
+      <div className="col"></div>
+    </span>
   );
 }

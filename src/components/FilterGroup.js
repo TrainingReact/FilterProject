@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import CheckboxSelectGroup from "./CheckboxSelectGroup";
 /**
  * The component manage filter groups
@@ -21,10 +21,8 @@ export default function FilterGroup(props) {
     setClassItemsState(arraySetst);
   }, []);
   return (
-    <div className={"sub-filter-container "}>
-      <span>
-        <CheckboxSelectGroup classItemsState={classItemsState} setClassItemsState={setClassItemsState} totalData={arr} setresult={setresult} />
-      </span>
-    </div>
+    <span>
+      <CheckboxSelectGroup classItemsState={classItemsState} setClassItemsState={setClassItemsState} totalData={arr} setresult={setresult} />
+    </span>
   );
 }

@@ -1,3 +1,5 @@
+//THIS FILE CONTAINS ALL FUNCTION (NOT COMPONENT OR CUSTOM HOOK )
+
 /**
  * the function checked if an array contains all checked element
  * @param {array} ckbox
@@ -20,7 +22,7 @@ export function whatIsCheckedByUser(next) {
 }
 
 /**
- * the function changes the object checked
+ * the function is the condition referred to the filter array js function in whatIsCheckedByUser
  * @param {object} el
  * @returns {object}
  */
@@ -100,4 +102,94 @@ export function formattingResFromData(data) {
   });
 
   return filterChoosen;
+}
+
+/**
+ * the function saves the previous state
+ * @param {array} previous
+ * @param {array} checkbox
+ * @param {function} setprevious
+ */
+export function saveData(previous, checkbox, setprevious) {
+  let data = previous.data;
+  //this code manage the situation in which after clicked check group you have to deselected one item.
+  //To take current check/uncheck values, you should read all checkbox active in this moment.
+  //So, "takecurrentchecked" store the actual values to put it in previous state.
+  //PS. I tried to create formatted data taking checkbox.currents but
+  //using Object.entries loop I obtained this kind of data: [{[{Array[1], Array[1],...},{Array[1], Array[1],...}]},
+  //{ [{Array[1], Array[1],...}, {Array[1], Array[1],...}] },...] instead of [{ [{}, {}]}, { [{}, {}]}, { [{}, {}]}, ...]
+  //this new kind of data added useless loop and it enlarges the code. It wasn't possible to correct this configuration data
+  //due to Object.entries return so I choose this other solution:
+  let takeCurrentChecked = [];
+  Object.entries(checkbox.current).map(([i, items]) => {
+    Object.entries(items.children).map(([indexLi, liElem]) => {
+      return Object.entries(liElem.children).map(([indexInp, inputElem]) => {
+        takeCurrentChecked.push({
+          filterValue: inputElem.value,
+          isChecked: inputElem.checked,
+        });
+      });
+    });
+  });
+  //useful to modified data to set the new configuration checked/unchecked
+  data.forEach((element) => {
+    Object.entries(element).map(([i, items]) => {
+      items.forEach((value) => {
+        const currentValue = takeCurrentChecked.find((el) => searchValue(el, value.filterValue));
+        return (value.isChecked = currentValue.isChecked);
+      });
+    });
+  });
+  //save actual check/uncheck to restore in other cases
+  setprevious({
+    data: data,
+  });
+}
+
+/**
+ * The function returns a previous state array.
+ * @param {array} data
+ * @returns {array}
+ */
+export function takePreviousChecked(data) {
+  let takePreviousChecked = [];
+  data.map((elem) => {
+    return Object.entries(elem).map(([group, items]) => {
+      items.map((el) => {
+        takePreviousChecked.push({
+          filterValue: el.filterValue,
+          isChecked: el.isChecked,
+        });
+      });
+    });
+  });
+  return takePreviousChecked;
+}
+
+/**
+ * this function checks if you manually selected single items until you select all items.
+ * It is useful to understand if the system must automatically checked select group button.
+ * Also, the function manages if you deselected a single item after checked all group
+ * @param {array} data
+ * @param {array} selectGroup
+ */
+export function manageGroupCheckboxes(data, selectGroup) {
+  data.map((elem) => {
+    return Object.entries(elem).map(([group, items]) => {
+      let isAllChecked = check(items, true);
+      if (isAllChecked) {
+        selectGroup.map((sel) => {
+          if (sel.value === group) {
+            sel.checked = true;
+          }
+        });
+      } else if (!isAllChecked) {
+        selectGroup.map((sel) => {
+          if (sel.value === group) {
+            sel.checked = false;
+          }
+        });
+      }
+    });
+  });
 }
